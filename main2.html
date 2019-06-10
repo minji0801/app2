@@ -1,0 +1,56 @@
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>홈</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script type="text/javascript" src="https://npmcdn.com/parse@2.1.0/dist/parse.js"></script>
+</head>
+<body>
+	<div id="menu" style="margin-top: 50px; margin-bottom: 50px">
+		<input type="button" name="menu" value="메뉴" style="width: 200px; font-size: 50px; color: #2E9AFE; background-color: #ffffff; border: none" onclick="menu()">
+	</div>
+
+	<div class="container" style="font-size: 30px; margin-left: 50px; margin-top: 50px">
+     <ul class="collection with-header col s3">
+      <li id="addli" class="album-item"></li>
+     </ul>
+  </div>
+
+	<div>
+		<img id="frame" src="blob:http://mobileapp31.herokuapp.com/c9b2c205-c1e1-48c2-95ff-e3179f68e132" style="margin-top: 50px; margin-left: 50px; margin-right: 50px; margin-bottom: 50px; ">
+	</div>
+	
+
+	<script type="text/javascript">
+		Parse.initialize("kimminji");
+		Parse.serverURL = 'https://lit-tundra-86619.herokuapp.com/parse'
+
+		function menu() {
+			window.location = "menu.html"
+		}
+
+		var Gallery = Parse.Object.extend("Gallery");
+        var query = new Parse.Query(Gallery);
+        query.equalTo("username",Parse.User.current().get("username") );
+        query.find()
+        .then(function(results) {
+            for(var i = 0; i < results.length; i++) {
+                var result = results[i];
+                $("#addli").append("<li class='album-item'>" +  result.get("image") +"</div></li>")
+            }
+        })
+
+
+        
+       
+       
+        	
+        
+		
+		
+	</script>		
+</body>
+</html>

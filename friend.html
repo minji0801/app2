@@ -1,0 +1,71 @@
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>친구목록</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script type="text/javascript" src="https://npmcdn.com/parse@2.1.0/dist/parse.js"></script>
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+</head>
+<body>
+	<div id="menu" style="margin-top: 50px; margin-bottom: 50px; font-size: 50px">
+		<input type="button" name="back" value="뒤로" style="width: 200px; margin-right: 170px;font-size: 50px; color: #2E9AFE; background-color: #ffffff; border: none" onclick="back()">
+		친구목록
+	</div>
+	<div id="add" style="height: 300px; float: left;">
+		<input type="text" id="search" style="margin-top: 85px; margin-left: 50px; width: 750px; height: 80px; font-size: 50px">
+	</div>
+	<div id="addicon" style="height: 100px;margin-top: 130px; margin-bottom: 130px">
+		<button style="background-color: #ffffff; border:none; margin-left: 50px" onclick="add()"><img src="add.png" style="width: 80px; height: 80px"></button>
+	</div>
+
+	<div class="container">
+     <ul class="collection with-header col s3">
+      <li class="collection-header" style="font-size: 50px; margin-left: 50px"><h4>나의 친구들</h4></li>
+     </ul>
+     <ol id="addli" class="collection with-header col s3" style="font-size: 50px; margin-left: 50px">
+     </ol>
+    </div>
+
+	<script type="text/javascript">
+		Parse.initialize("kimminji");
+		Parse.serverURL = 'https://lit-tundra-86619.herokuapp.com/parse'
+
+		function back() {
+			window.location = "menu.html"
+		}
+
+		function add() {
+			var Friend = Parse.Object.extend("Friend");
+  			var ffriend = new Friend();
+  			var search = $("#search").val();		
+  			ffriend.set("username", Parse.User.current().get("username"));
+  			ffriend.set("friend", search);
+  			ffriend.save()
+  			.then((friend) => {	
+				alert("친구추가되었습니다. 새로고침을 눌러주세요.");	
+			}, (error) => {
+				alert("친구목록에 없습니다. : " + error.message);
+			});		
+		}
+
+		var Friend = Parse.Object.extend("Friend");
+        var query = new Parse.Query(Friend);
+        query.equalTo("username", Parse.User.current().get("username"));
+        query.ascending("friend")
+        query.find()
+        .then(function(results) {
+            for(var i = 0; i < results.length; i++) {
+                var result = results[i];
+                $("#addli").append("<li class='collection-item col s3'>" +  result.get("friend") +"</div></li>")
+            }
+        })
+
+	</script>
+</body>
+</html>
